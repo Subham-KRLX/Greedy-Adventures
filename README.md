@@ -30,6 +30,7 @@ Public information was captured from the [Sea View Skydiving page](https://www.g
 
 - **PDF (`/api/brochure`):** Dynamically generated with `pdf-lib`, clearly labelled as *“Demo material - Not an official offer”*.
 - **Video & Images:** Streams official dropzone footage and photos from Cloudflare R2 storage.
+- **Experience Sections:** Faithfully models the public page with 5 alternating plan steps, 3-column details grid, and interactive Good to Know FAQ accordion with active scroll-spy navigation.
 - **Unavailable Files:** Requests for unsupported documents (insurance, medical waivers, receipts) are refused without substitute files.
 
 ---
