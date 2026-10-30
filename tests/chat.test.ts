@@ -24,3 +24,26 @@ test("both formats selected together",()=>assert.deepEqual(ask("Send me the broc
 test("unsupported files and facts are not invented",()=>{assert.equal(ask("Send an insurance document").media.length,0);assert.match(ask("What is the weight limit?").text,/not available/);});
 test("follow-up uses prior chosen package",()=>{const a=answerChat({messages:[{role:"user",text:"Tell me about DELUXE"},{role:"assistant",text:"DELUXE"},{role:"user",text:"How much does it cost?"}]});assert.match(a.text,/12,500/);assert.match(a.text,/For DELUXE/);});
 test("invalid and oversized inputs rejected",()=>{assert.equal(requestSchema.safeParse({messages:[]}).success,false);assert.equal(requestSchema.safeParse({messages:[{role:"user",text:"x".repeat(3001)}]}).success,false);});
+
+test("follow-up follows the most recently discussed package", () => {
+  const result = answerChat({ messages: [
+    { role: "user", text: "Tell me about VIP" },
+    { role: "user", text: "What about ECO?" },
+    { role: "user", text: "How much does it cost?" },
+  ] });
+  assert.match(result.text, /For ECO:/);
+  assert.match(result.text, /9,500/);
+});
+
+test("unavailable PDFs are not substituted with the demo brochure", () => {
+  for (const question of ["Send the insurance PDF", "Show my receipt PDF", "Send a medical brochure"]) {
+    const result = ask(question);
+    assert.deepEqual(result.media, []);
+    assert.match(result.text, /not available/);
+  }
+});
+
+test("explicit package video requests deliver video but inclusion questions do not", () => {
+  assert.deepEqual(ask("Can I see a video of the package?").media.map(m => m.kind), ["video"]);
+  assert.deepEqual(ask("Is video included in DELUXE?").media, []);
+});

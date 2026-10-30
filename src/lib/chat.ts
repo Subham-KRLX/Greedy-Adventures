@@ -7,11 +7,16 @@ export function answerChat(input: ChatRequest) {
   const question = users.at(-1)?.text ?? "";
   const q = question.toLowerCase();
   const previous = users.slice(0, -1).map(m => m.text).join(" ").toLowerCase();
+  const previousPackage = users.slice(0, -1).reverse()
+    .map(m => m.text.match(/\b(eco|deluxe|vip)\b/gi)?.at(-1)?.toUpperCase())
+    .find(Boolean);
   const selected: (typeof media)[number][] = [];
-  const wantsPdf = /\b(brochure|pdf|leaflet)\b/.test(q);
-  const wantsVideo = /\b(video|film|clip|watch)\b/.test(q) && !/\b(included|include|package|deluxe|vip)\b/.test(q);
+  const unavailableFile = /\b(insurance|medical|refund|waiver|invoice|receipt)\b/.test(q);
+  const wantsPdf = !unavailableFile && /\b(brochure|pdf|leaflet)\b/.test(q);
+  const wantsVideo = !unavailableFile && /\b(video|film|clip|watch)\b/.test(q)
+    && (/\b(send|show|watch|see|share|play)\b/.test(q) || !/\b(included|include|package|deluxe|vip)\b/.test(q));
   if (wantsPdf) selected.push(media[0]);
-  if (wantsVideo || (/\bboth\b/.test(q) && /brochure|video/.test(previous))) {
+  if (wantsVideo || (!unavailableFile && /\bboth\b/.test(q) && /brochure|video/.test(previous))) {
     if (!selected.includes(media[0]) && /\bboth\b/.test(q)) selected.push(media[0]);
     selected.push(media[1]);
   }
@@ -27,7 +32,8 @@ export function answerChat(input: ChatRequest) {
   else if (/\b(refund|cancellation|cancel|insurance|weight|age|medical|pregnant|discount|tomorrow|available|availability|booking|book|weather)\b/.test(q)) { /* Unpublished details must not be guessed. */ }
   else if (/price|cost|package|eco|deluxe|vip|included|includes|inclusion|how much/.test(q) || (/what about|that one|it cost/.test(q) && /eco|deluxe|vip|package/.test(previous))) {
     ids = ["packages", "included"];
-    const chosen = /vip/.test(q) ? "VIP" : /deluxe/.test(q) ? "DELUXE" : /eco/.test(q) ? "ECO" : /\bit\b|that one/.test(q) ? (/vip/.test(previous) ? "VIP" : /deluxe/.test(previous) ? "DELUXE" : /eco/.test(previous) ? "ECO" : "") : "";
+    const chosen = q.match(/\b(eco|deluxe|vip)\b/gi)?.at(-1)?.toUpperCase()
+      ?? (/\bit\b|that one/.test(q) ? previousPackage ?? "" : "");
     text = `${chosen ? `For ${chosen}: ` : "The packages are ECO (THB 9,500), DELUXE (THB 12,500) and VIP (THB 14,000) per person. "}All include a tandem jump, safety briefing, instructor support, aircraft ascent and a completion certificate. ${chosen === "ECO" ? "ECO is THB 9,500 per person, for the jump only." : chosen === "DELUXE" ? "DELUXE is THB 12,500 per person with video and photos." : chosen === "VIP" ? "VIP is THB 14,000 per person with a personal cameraman and edited film." : "DELUXE adds video and photos; VIP includes a personal cameraman and edited film."}`;
   } else if (/where|location|pickup|bangkok|address/.test(q)) { ids = ["location"]; text = source.sections[3].text; }
   else if (/high|altitude|long|duration|experience|freefall|instructor|first|beginner|training/.test(q)) { ids = ["experience"]; text = source.sections[2].text; }
