@@ -65,21 +65,21 @@ Access `/knowledge` via:
 
 ---
 
-## 5. Verification Checklist
+## 5. Verification & Testing
 
-| Test Prompt | Expected Result | Status |
-| :--- | :--- | :---: |
-| *“What is included in the package?”* | Text-only answer listing inclusions. No attachments. | ✅ Verified |
-| *“Can you send me a brochure?”* | Confirms brochure; attaches PDF card with open/download button. | ✅ Verified |
-| *“Can I see a video of the experience?”* | Confirms video; attaches video card with watch link. | ✅ Verified |
-| *“Send me the brochure and a video.”* | Attaches both PDF and video cards simultaneously. | ✅ Verified |
-| *“Tell me about VIP, then ECO, then its cost”* | Contextual follow-up correctly resolves ECO (THB 9,500). | ✅ Verified |
-| *“Send the insurance PDF”* | Refuses politely; never substitutes an unrelated file. | ✅ Verified |
-| *“What is the weight limit?”* | Explains unlisted detail is not in public guide; refers to team. | ✅ Verified |
-| *Backend Knowledge Test* | Raw trace shows `modelCalled: true` and active model. | ✅ Verified |
-| *Simulate Backend Failure* | Returns HTTP 503 error; recovers on retry. | ✅ Verified |
+Run the automated test suite covering all required prompts, follow-up memory, and fallback behavior:
+```sh
+npm test    # 11 unit tests in tests/chat.test.ts (<200ms)
+```
 
-*Run `npm test` to execute all 11 automated unit tests.*
+### Repeatable Checks
+- **Text Only**: *"What is included in the package?"* → Inclusions text, no attachments.
+- **PDF Delivery**: *"Can you send me a brochure?"* → Attaches PDF card with open/download button.
+- **Video Delivery**: *"Can I see a video of the experience?"* → Attaches video card with watch link.
+- **Both Formats**: *"Send me the brochure and a video."* → Attaches both cards simultaneously.
+- **Follow-up Memory**: *"Tell me about VIP"*, then *"What about ECO?"*, then *"How much does it cost?"* → Correctly resolves ECO (THB 9,500).
+- **Missing Information**: *"What is the weight limit?"* or *"Send the insurance PDF"* → Refuses unlisted policies/files without hallucinating.
+- **Backend Trace & Failure**: On [`/knowledge`](https://greedy-adventures-zeta.vercel.app/knowledge), inspect live model activity or toggle *"Simulate backend failure"* to test 503 error handling.
 
 ---
 
