@@ -2,25 +2,33 @@
 
 Take-home prototype featuring a responsive experience page, an assistant-ui guide powered by Google Gemini (with deterministic mock fallback), dynamic PDF generation, and a backend knowledge inspector.
 
+> **Verification status:** Gemini integration is implemented, but production redeployment and a successful live-model response have not yet been verified. Mock mode is available. Do not interpret the presence of an API key or the "Live AI" header as proof that a model request succeeded; inspect the individual response mode and trace.
+
 [Live Demo](https://greedy-adventures-zeta.vercel.app/) · [Knowledge View](https://greedy-adventures-zeta.vercel.app/knowledge) · [Original Experience](https://www.greedyadventures.com/experiences/sea-view-skydiving)
 
 ---
 
 ## 1. Setup & Quick Start
 
+Use Node.js 22.17+ or Node.js 24 with npm.
+
 ```sh
 npm ci
-npm run dev      # Opens http://localhost:3000
+npm run dev      # Serves http://localhost:3000
 npm test         # Runs 11 automated unit tests
+npm run typecheck # Checks TypeScript without emitting files
 npm run build    # Production Next.js build
+npm start        # Serves the production build
 ```
 
 ### Environment Variables (Optional)
-To enable live AI generation via **Google Gemini 2.5 Flash**, add your free key to `.env.local` (or in Vercel Project Settings):
+To enable live AI generation via **Google Gemini 2.5 Flash**, add a valid key to the gitignored `.env.local` file. On Vercel, save it as a Production Secret and redeploy. Keep the key server-side and never prefix it with `NEXT_PUBLIC_` or commit it to GitHub.
 ```env
 GEMINI_API_KEY=your_key_here
 ```
 *If omitted, the app runs out-of-the-box in deterministic mock mode with zero configuration.*
+
+Stop the development server before running `npm start` on the same port. Model availability and any free quota depend on the provider account; confirm access before incurring costs.
 
 ---
 
