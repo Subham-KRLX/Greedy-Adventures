@@ -55,31 +55,55 @@
 .facts small{font-size:13px;font-weight:400}
 .facts span{font-size:11px;color:#607673}
 .facts p{margin:0;align-self:center;font-size:16px}
-.section{padding:85px 5%;max-width:1800px;margin:auto}
-.section-heading{display:flex;justify-content:space-between;gap:24px;align-items:center}
-.section-heading>p{font-size:13px;color:#607673}
-.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
-.package{padding:28px;border:1px solid #c9d6cf;background:white;border-radius:6px;display:flex;flex-direction:column;min-width:0}
-.featured{background:var(--ink);color:white;border-color:var(--ink)}
-.package-top{display:flex;justify-content:space-between;gap:6px;font-size:10px;align-items:center;min-height:24px}
-.tag{font-size:8px;padding:5px 7px;border:1px solid #ffffff60;color:var(--lime)}
-.package h3{font-size:23px;font-weight:500;min-height:58px;margin:30px 0 0;line-height:1.3}
-.package>p{font-size:12px;opacity:.7;margin-top:8px}
-.price{font-size:37px;margin-top:22px}
-.price span{font-size:12px;opacity:.7}
-.package ul{list-style:none;padding:22px 0;margin:20px 0 22px;border-top:1px solid #92a79b60;display:grid;gap:15px;font-size:12px}
-.package li{display:flex;gap:9px;align-items:center}
-.package .button{margin-top:auto;width:100%}
+/* ── Experience Sticky Sub-Nav (Matches original greedyadventures.com) ── */
+.experience-subnav{position:sticky;top:0;z-index:60;background:#ffffff;border-bottom:1px solid #e7ece9;box-shadow:0 2px 10px rgba(0,0,0,0.03)}
+.experience-subnav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1360px;margin:0 auto;padding:0 5%}
+.subnav-tabs{display:flex;align-items:center;gap:32px}
+.subnav-tab{display:inline-block;padding:18px 0;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#1a2a29;position:relative;transition:color .15s ease}
+.subnav-tab:hover{color:#0b1f20}
+.subnav-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:#112829}
+.subnav-cta{display:inline-flex;align-items:center;justify-content:center;background:#001820;color:#ffffff;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:10px 22px;border-radius:2px;transition:background .15s ease}
+.subnav-cta:hover{background:#0c333a;color:#ffffff}
+
+/* ── Packages Section (Exact Greedy Adventures Layout) ── */
+.packages-section{padding:60px 5% 70px;background:#f7f9f7}
+.packages-container{max-width:1360px;margin:0 auto}
+.packages-heading{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#112829;margin:0 0 28px}
+.packages-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.package-card{background:#ffffff;border:1px solid #e1e7e4;border-radius:3px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+.package-card:hover{box-shadow:0 8px 30px rgba(0,24,32,0.07)}
+.package-card-media{width:100%;aspect-ratio:16/10;overflow:hidden;background:#001820}
+.package-card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.package-card:hover .package-card-img{transform:scale(1.03)}
+.package-card-body{padding:24px 26px 26px;display:flex;flex-direction:column;flex:1}
+.package-card-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#112829;margin:0;line-height:1}
+.package-card-subtitle{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#71847e;margin:6px 0 22px}
+.package-card-bullets{list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.45;color:#2b3e3b}
+.package-card-bullets li{display:flex;align-items:flex-start;gap:8px}
+.package-card-bullets .plus{font-weight:700;color:#112829;font-size:14px;line-height:1.2}
+.package-card-pricing{border-top:1px solid #eef2ef;padding-top:18px;margin-top:auto;display:flex;align-items:baseline;gap:8px;margin-bottom:20px}
+.price-amount{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:800;color:#112829;line-height:1;display:flex;align-items:baseline}
+.currency-symbol{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:700;margin-right:2px;font-size:32px}
+.price-per{font-family:'DM Sans',sans-serif;font-size:12px;color:#71847e}
+.package-card-button{display:block;width:100%;background:#001820;color:#ffffff;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;text-align:center;border-radius:2px;transition:background .15s ease}
+.package-card-button:hover{background:#0c333a;color:#ffffff}
+
+/* ── The Plan Section ── */
+.plan-section{padding:70px 5% 85px;background:#ffffff;border-top:1px solid #eef2ef}
+.plan-container{max-width:1360px;margin:0 auto}
+.plan-heading{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#112829;margin:0 0 32px}
+.journey-grid{display:grid;grid-template-columns:1fr 1fr;gap:8%;align-items:start}
+.journey-subheading{font-size:36px;font-weight:600;line-height:1.15;margin:12px 0 18px;color:#112829}
+.journey-desc{font-size:14px;color:#637770;line-height:1.65;max-width:440px}
+.journey-link{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1.5px solid #112829;padding-bottom:4px;margin-top:20px}
+.journey-steps{list-style:none;padding:0;margin:0}
+.journey-steps li{padding:20px 0;border-bottom:1px solid #e1e7e4;display:flex;align-items:center;gap:20px;font-size:14px;font-weight:500;color:#2b3e3b}
+.journey-steps li span{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:#71847e;letter-spacing:1px}
+
 .caption{color:#637770;font-size:11px;margin-top:24px;max-width:800px}
 .film{padding-top:24px}
 .film video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#101c1d}
 .film .caption a{text-decoration:underline;text-underline-offset:3px}
-.journey{display:grid;grid-template-columns:1fr 1fr;gap:12%;border-top:1px solid #d7e2dd}
-.journey>div>p:not(.eyebrow){font-size:14px;max-width:430px;color:#637770}
-.journey a{display:inline-flex;align-items:center;gap:14px;border-bottom:1px solid;font-size:13px;padding:16px 0 6px}
-.journey ol{list-style:none;padding:0}
-.journey li{padding:22px 0;border-bottom:1px solid #c9d6cf;display:flex;gap:22px;font-size:14px}
-.journey li>span{font-size:11px;color:#607673}
 footer{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:36px 5% 100px;background:#eaf0ea}
 footer p,footer>a:last-child{font-size:12px}
 footer>a:last-child{display:flex;gap:10px}
@@ -109,21 +133,44 @@ footer>a:last-child{display:flex;gap:10px}
 .loading{font-size:12px}
 .skip{position:absolute;top:-100px;left:16px;z-index:99;background:white;padding:14px}
 .skip:focus{top:10px}
-.knowledge{max-width:1050px}
-.knowledge h1{font-size:48px;font-weight:500}
-.knowledge h2{font-size:25px;margin-top:45px}
-.knowledge h3{text-transform:capitalize;font-size:15px}
-.back{display:inline-flex;gap:10px;font-size:13px;margin-bottom:30px}
-.notice{background:#e8f1d8;padding:20px;font-size:14px}
-.knowledge-source{border-bottom:1px solid #c9d6cf;padding-bottom:25px}
-.knowledge-source a{font-size:12px;overflow-wrap:anywhere;text-decoration:underline}
-.knowledge-source p{font-size:14px}
-.trace-form{display:grid;gap:14px}
-.trace-form textarea{min-height:100px;padding:15px;border:1px solid #bdcec4;border-radius:4px}
+.section{padding:70px 5%;max-width:1360px;margin:0 auto}
+.knowledge{max-width:960px;margin:0 auto;padding:48px 5% 120px}
+.knowledge .back{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink);margin-bottom:32px;transition:opacity .15s}
+.knowledge .back:hover{opacity:0.7}
+.knowledge-header{margin-bottom:36px}
+.knowledge-header .eyebrow{margin-bottom:12px;font-size:11px;letter-spacing:2.5px}
+.knowledge h1{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#112829;margin:0 0 20px;line-height:1}
+.knowledge h2{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#112829;margin:40px 0 16px;line-height:1.1}
+.notice{background:#edf6ec;border-left:3px solid #6e9a66;padding:18px 22px;font-size:13.5px;line-height:1.6;border-radius:0 3px 3px 0;margin:0;color:#1c3d31}
+.knowledge-source{border-bottom:1px solid #dce4e0;padding-bottom:36px;margin-bottom:36px}
+.knowledge-source h2{margin-top:20px;font-size:30px}
+.knowledge-source .source-url{display:inline-block;font-size:13px;color:#185a53;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:3px;margin-bottom:8px}
+.knowledge-source .captured{font-size:12px;color:#71847e;margin:0 0 24px}
+.source-sections-list{display:grid;gap:14px}
+.knowledge-section-card{background:#ffffff;border:1px solid #e1e7e4;border-radius:3px;padding:18px 22px}
+.knowledge-section-card h3{font-family:'DM Sans',sans-serif;text-transform:uppercase;font-size:12px;font-weight:700;letter-spacing:1.2px;color:#112829;margin:0 0 8px}
+.knowledge-section-card p{color:#2b3e3b;font-size:13.5px;line-height:1.6;margin:0}
+.material-list{display:grid;gap:10px}
+.knowledge-media-item{background:#ffffff;border:1px solid #e1e7e4;border-radius:3px;padding:14px 20px;font-size:13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.knowledge-media-item a{font-weight:700;color:#112829;text-decoration:underline;text-underline-offset:2px}
+.knowledge-media-item .dot{color:#abb8b2}
+.knowledge-media-item .badge{background:#e7efe9;color:#1e3c38;font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:2px}
+.knowledge-media-item .desc{color:#71847e;font-size:12px}
+.trace-form{background:#ffffff;border:1px solid #e1e7e4;border-radius:3px;padding:24px;display:grid;gap:16px;margin-top:16px}
+.trace-form label{font-size:13px;font-weight:700;letter-spacing:0.5px;color:#112829}
+.trace-form textarea{min-height:90px;padding:14px;border:1px solid #c9d6cf;border-radius:3px;font-family:inherit;font-size:13.5px;color:#112829}
+.trace-form textarea:focus{border-color:#112829;outline:none}
+.trace-form .checkbox-label{display:flex;align-items:center;gap:8px;font-weight:400;font-size:13px;cursor:pointer}
 .trace-form .button{justify-self:start}
-.knowledge pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#173e3d;color:#e5f0e7;padding:20px;font-size:12px;line-height:1.65;border-radius:4px;margin-top:25px}
+.knowledge pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#001820;color:#d8f3e5;padding:22px;font-size:12px;line-height:1.65;border-radius:4px;margin-top:24px}
 
 @media(min-width:1600px){.hero-inner{padding-top:65px}.hero h1{font-size:88px}}
+@media(max-width:960px){
+  .packages-cards-grid{grid-template-columns:1fr}
+  .subnav-tabs{gap:16px}
+  .subnav-cta{display:none}
+  .journey-grid{grid-template-columns:1fr;gap:36px}
+}
 @media(max-width:900px){
   .nav-mega-content{grid-template-columns:1fr;gap:28px}
   .nav-mega-cards{grid-template-columns:1fr}
@@ -135,6 +182,7 @@ footer>a:last-child{display:flex;gap:10px}
   .nav-mega-links a{font-size:26px}
   .experience-header{padding:30px 5% 20px}
   .experience-header h1{font-size:32px}
+  .packages-heading,.plan-heading{font-size:32px}
   .hero{height:60vh;min-height:420px;background-position:60% center}
   .hero-inner{padding-top:30px}
   .facts{grid-template-columns:repeat(3,1fr);gap:14px;padding:26px 5%}
@@ -142,15 +190,9 @@ footer>a:last-child{display:flex;gap:10px}
   .facts strong{font-size:26px}
   .facts small{font-size:10px}
   .facts span{font-size:9px}
+  .packages-section,.plan-section{padding:40px 5% 50px}
   .section{padding:55px 5%}
   h2{font-size:32px}
-  .section-heading{display:block}
-  .packages{grid-template-columns:1fr}
-  .package{padding:26px}
-  .package h3{min-height:0;margin-top:22px}
-  .package ul{margin:10px 0 22px}
-  .package .price{margin-top:10px}
-  .journey{grid-template-columns:1fr;gap:20px}
   footer{flex-wrap:wrap;padding-bottom:110px}
   .chat-toggle{right:16px;bottom:16px}
   .chat-panel{right:16px;bottom:83px;max-height:calc(100dvh - 100px)}

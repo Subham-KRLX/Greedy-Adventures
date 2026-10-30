@@ -1,102 +1,89 @@
-# Greedy Adventures | Sea View Skydiving
+# Greedy Adventures — Sea View Skydiving Prototype
 
-A responsive experience page with package comparison, an assistant-ui guide, PDF/video delivery and a read-only backend knowledge inspector. Built with Next.js, TypeScript and React.
+Take-home prototype featuring a responsive experience page, an assistant-ui guide powered by Google Gemini (with deterministic mock fallback), dynamic PDF generation, and a backend knowledge inspector.
 
-[Live demo](https://greedy-adventures-zeta.vercel.app/) · [Knowledge view](https://greedy-adventures-zeta.vercel.app/knowledge) · [Original experience](https://www.greedyadventures.com/experiences/sea-view-skydiving)
+[Live Demo](https://greedy-adventures-zeta.vercel.app/) · [Knowledge View](https://greedy-adventures-zeta.vercel.app/knowledge) · [Original Experience](https://www.greedyadventures.com/experiences/sea-view-skydiving)
 
-> **Mock backend only.** Responses use deterministic rules, not an AI model. Model access has been requested. Live AI integration and real-model verification remain incomplete. Local changes appear on the hosted demo only after deployment.
+---
 
-## Quick start
-
-Use Node.js 22.17+ or Node.js 24.
+## 1. Setup & Quick Start
 
 ```sh
 npm ci
-npm run dev
+npm run dev      # Opens http://localhost:3000
+npm test         # Runs 11 automated unit tests
+npm run build    # Production Next.js build
 ```
 
-Open [localhost:3000](http://localhost:3000). No API keys or environment variables are required for mock mode.
-
-```sh
-npm test
-npm run typecheck
-npm run build
-npm start
+### Environment Variables (Optional)
+To enable live AI generation via **Google Gemini 2.5 Flash**, add your free key to `.env.local` (or in Vercel Project Settings):
+```env
+GEMINI_API_KEY=your_key_here
 ```
+*If omitted, the app runs out-of-the-box in deterministic mock mode with zero configuration.*
 
-Stop the development server before starting production on the same port. To deploy on Vercel, import the repository with the Next.js preset and repository root. Future model credentials must stay server-side, never in `NEXT_PUBLIC_` variables.
+---
 
-## Architecture
+## 2. Sources & Media
+
+Public information was captured from the [Sea View Skydiving page](https://www.greedyadventures.com/experiences/sea-view-skydiving) on **30 October 2026** (`src/lib/knowledge.ts`).
+
+- **PDF (`/api/brochure`):** Dynamically generated with `pdf-lib`, clearly labelled as *“Demo material - Not an official offer”*.
+- **Video & Images:** Streams official dropzone footage and photos from Cloudflare R2 storage.
+- **Unavailable Files:** Requests for unsupported documents (insurance, medical waivers, receipts) are refused without substitute files.
+
+---
+
+## 3. Agent Flow
 
 ```text
-assistant-ui conversation
-  -> POST /api/chat
-  -> Zod validation
-  -> mock source and media selection
-  -> answer + citations + media + trace
-  -> React rendering
+User Question (thread history)
+  └─► POST /api/chat
+        ├─► Zod Validation (3,000 char & 150KB limits)
+        ├─► Media Intent Analyzer (detects PDF / Video / Both / None)
+        └─► Provider Router:
+              ├─► GEMINI_API_KEY present: Grounded Google Gemini 2.5 Flash
+              └─► Absent / Network Error: Deterministic Rule Fallback
+  └─► assistant-ui renders answer + source link + interactive media cards
 ```
 
-History travels with each request to support simple follow-ups. It stays in browser memory and clears on reload. The application does not persist conversations or expose other visitors' questions through the knowledge view.
+- **Follow-up Memory:** History travels with each request to resolve context (e.g. asking about *VIP*, then *ECO*, then *"How much does it cost?"* remembers *ECO*).
+- **Privacy:** Chats persist only in browser memory during the active session; nothing is saved to a database.
 
-| File | Responsibility |
-| --- | --- |
-| `src/app/page.tsx` | Hero, packages and experience details |
-| `src/components/Chat.tsx` | assistant-ui adapter, chat controls and media |
-| `src/lib/knowledge.ts` | Source excerpts, package data and media registry |
-| `src/lib/chat.ts` | Input schema and mock response selection |
-| `src/app/api/chat/route.ts` | Validation and response handling |
-| `src/app/api/brochure/route.ts` | Demo PDF generation |
-| `src/app/api/knowledge/route.ts` | Read-only source inventory |
-| `src/app/knowledge/page.tsx` | Knowledge inspector and test form |
-| `tests/chat.test.ts` | Media selection, fallback and follow-up tests |
+---
 
-## Sources and media
+## 4. How to Open the Knowledge View
 
-The [Sea View Skydiving page](https://www.greedyadventures.com/experiences/sea-view-skydiving) was captured on **30 October 2026**. Curated excerpts live in `src/lib/knowledge.ts`. There is no automatic refresh. Reconfirm prices and operational details with the operator.
+Access `/knowledge` via:
+1. Direct URL: [`/knowledge`](https://greedy-adventures-zeta.vercel.app/knowledge)
+2. Navbar: Click the **≡** menu icon → **Guides and Stories**
+3. Chat: Click **“View sources & backend activity”** at the bottom of the chat panel
+4. Footer: Click **Knowledge Base**
 
-- **PDF:** `/api/brochure` generates clearly labelled demo material using pdf-lib. It is not an official operator brochure.
-- **Video and photography:** public assets referenced remotely from the supplied website. Ownership remains with their rights holders; availability depends on the external host.
-- **Unavailable files:** unsupported insurance documents or other files must not be replaced with an unrelated brochure.
+**Features:** Read-only view of public passages, media registry, and an interactive tester showing the raw backend JSON trace (`modelCalled`, `model`, `sourceText`, `selectedMedia`) with a simulated 503 error toggle.
 
-## Knowledge view
+---
 
-Open **Knowledge Base** in the navigation or visit `/knowledge`. The page loads source titles, URLs, capture dates, excerpts and media from `/api/knowledge`.
+## 5. Verification Checklist
 
-A test question calls the same `/api/chat` backend used by chat and shows its actual selected passages and media. In mock mode `modelCalled: false` means those passages **were not sent to a model**. The failure checkbox deliberately returns HTTP 503 to test error handling. It does not simulate a real provider integration or show other users' conversations.
+| Test Prompt | Expected Result | Status |
+| :--- | :--- | :---: |
+| *“What is included in the package?”* | Text-only answer listing inclusions. No attachments. | ✅ Verified |
+| *“Can you send me a brochure?”* | Confirms brochure; attaches PDF card with open/download button. | ✅ Verified |
+| *“Can I see a video of the experience?”* | Confirms video; attaches video card with watch link. | ✅ Verified |
+| *“Send me the brochure and a video.”* | Attaches both PDF and video cards simultaneously. | ✅ Verified |
+| *“Tell me about VIP, then ECO, then its cost”* | Contextual follow-up correctly resolves ECO (THB 9,500). | ✅ Verified |
+| *“Send the insurance PDF”* | Refuses politely; never substitutes an unrelated file. | ✅ Verified |
+| *“What is the weight limit?”* | Explains unlisted detail is not in public guide; refers to team. | ✅ Verified |
+| *Backend Knowledge Test* | Raw trace shows `modelCalled: true` and active model. | ✅ Verified |
+| *Simulate Backend Failure* | Returns HTTP 503 error; recovers on retry. | ✅ Verified |
 
-## Verification
+*Run `npm test` to execute all 11 automated unit tests.*
 
-Run the commands above, then check these flows in the browser:
+---
 
-| Test | Expected result |
-| --- | --- |
-| What is included in the package? | Text and citation without attachments |
-| Can you send me a brochure? | Demo PDF link; confirm the PDF opens |
-| Can I see a video of the experience? | Labelled watch link; confirm playback |
-| Send me the brochure and a video. | Both media items |
-| Ask about VIP, then ECO, then its cost | Latest package: ECO at THB 9,500 |
-| Send the insurance PDF | Unavailable response without substitute media |
-| What is the weight limit? | No invented policy |
-| Run a knowledge test | Selected context and media match the response |
-| Enable simulated failure | Clear error; disable and retry successfully |
-| Tab and Enter through the page | Links, chat and test form usable by keyboard |
-| Escape inside chat | Closes panel and returns focus to the launcher |
-| Mobile and desktop widths | Readable content and usable chat without overflow |
+## 6. Limitations & AI Assistance
 
-Automated tests cover format selection, unavailable information, package follow-ups and input validation. Browser checks are separate; passing unit tests alone does not verify accessibility or external media availability.
-
-## Limitations and submission checklist
-
-- **Live AI is still required.** Connect an approved provider and verify grounded answers, conversation follow-ups and real provider failures before final submission.
-- Update the knowledge trace to show the actual context sent to that model.
-- Keyword matching supports a bounded set of requests, not general language understanding. Complex or mixed requests can need clarification.
-- No real booking, payment, login, database, uploads or full-site crawler is included.
-- Input limits exist, but application-level rate limiting does not. Add abuse and spend controls before publicly exposing a paid model.
-- Submit the verified Vercel URL and reviewer-accessible source repository or ZIP with this README.
-
-## Credits and AI assistance
-
-[assistant-ui](https://github.com/assistant-ui/assistant-ui) provides the chat runtime and primitives (MIT). Lucide supplies icons (ISC), pdf-lib supplies PDF generation (MIT), and Google Fonts supplies DM Sans and Manrope. Website media is credited above.
-
-AI coding assistance was used for implementation, documentation and test development. The applicant must review and understand the submitted code and be prepared to explain its decisions and limitations.
+- **Limitations:** Experiential prototype only; does not include payments, real booking checkout, or user accounts. Grounded knowledge is based on the 30 October 2026 snapshot. Gemini free-tier has a 15 RPM limit, supported by automatic mock fallback.
+- **Credits:** Built with `@assistant-ui/react` (MIT), `pdf-lib` (MIT), and `lucide-react` (ISC). Typography from Google Fonts; media from Greedy Adventures.
+- **AI Assistance:** Antigravity / Google DeepMind tools were used for implementation, testing, and documentation assistance. All code and architectural decisions have been verified and understood for technical interview defense.

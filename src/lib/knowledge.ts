@@ -6,9 +6,45 @@ export const source = { title: "Sea View Skydiving - Tandem Jump over Pattaya", 
   { id: "location", text: "Pattaya Sea View, Pattaya, Thailand. 95 M.4, Chakphong, Klaeng District, Rayong 21190, Thailand. Operated by Dropzone Thailand. Bangkok pickup is available as a fixed-price add-on." }
 ] };
 export const packages = [
-  { name: "ECO", price: "9,500", subtitle: "The Essential Jump", detail: "The complete tandem experience", features: ["Safety briefing & instructor", "Ocean-view aircraft ascent", "Tandem jump & certificate"] },
-  { name: "DELUXE", price: "12,500", subtitle: "The Jump, Captured", detail: "Relive your jump with video and photos", features: ["Everything in ECO", "Handy cam video", "Photos of your experience"] },
-  { name: "VIP", price: "14,000", subtitle: "Your Own Jump Film", detail: "A personal cameraman and an edited film", features: ["Everything in ECO", "Personal cameraman", "Edited film of your jump"] }
+  {
+    name: "ECO",
+    price: "9,500",
+    subtitle: "THE JUMP, NOTHING ELSE",
+    image: "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/tandem-with-sea-view.webp",
+    detail: "The complete tandem experience",
+    features: [
+      "Tandem skydive experience in Pattaya, Thailand",
+      "Safety briefing and tandem instructor support",
+      "Aircraft ascent and ocean-view jump experience",
+      "Certificate of completion",
+    ],
+  },
+  {
+    name: "DELUXE",
+    price: "12,500",
+    subtitle: "VIDEO AND PHOTOS INCLUDED",
+    image: "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/instrcutor-with-customer.webp",
+    detail: "Relive your jump with video and photos",
+    features: [
+      "Tandem skydive experience in Pattaya, Thailand",
+      "Safety briefing and tandem instructor support",
+      "Aircraft ascent and ocean-view jump experience",
+      "Certificate of completion",
+    ],
+  },
+  {
+    name: "VIP",
+    price: "14,000",
+    subtitle: "PERSONAL CAMERAMAN AND EDITED FILM",
+    image: "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/jump-after-exit.webp",
+    detail: "A personal cameraman and an edited film",
+    features: [
+      "Tandem skydive experience in Pattaya, Thailand",
+      "Safety briefing and tandem instructor support",
+      "Aircraft ascent and ocean-view jump experience",
+      "Certificate of completion",
+    ],
+  },
 ];
 export const media = [
   { id: "brochure", kind: "pdf", title: "Sea View experience brochure", url: "/api/brochure", demo: true },

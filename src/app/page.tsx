@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDown, ArrowUpRight, Check, Menu, Play, Search, Wind, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Menu, Play, Search, Wind, X } from "lucide-react";
 import Chat from "@/components/Chat";
 import { heroImage, packages, media, sourceUrl } from "@/lib/knowledge";
 
-const aircraftImage = "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80";
+const aircraftImage = "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/plane.webp";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function Home() {
           <div className="nav-center">
             <Search size={16} aria-hidden="true" />
             <a href="#packages">ESCAPES</a>
-            <a href="#journey">ADVENTURES</a>
+            <a href="#the-plan">ADVENTURES</a>
             <a href="/knowledge">ABOUT</a>
             <button
               className="nav-menu-btn"
@@ -55,14 +55,11 @@ export default function Home() {
             </button>
             <div className="nav-mega-content">
               <div className="nav-mega-links">
-                <a href="#journey" onClick={() => setMenuOpen(false)}>
+                <a href="#the-plan" onClick={() => setMenuOpen(false)}>
                   GO A LITTLE FURTHER
                 </a>
                 <a href="#packages" onClick={() => setMenuOpen(false)}>
                   BOOK A TANDEM
-                </a>
-                <a href="/knowledge" onClick={() => setMenuOpen(false)}>
-                  KNOWLEDGE BASE
                 </a>
                 <a
                   href="https://www.greedyadventures.com/contact"
@@ -154,7 +151,7 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="facts">
+        <div id="details" className="facts">
           <div>
             <strong>
               13,000 <small>ft</small>
@@ -180,59 +177,123 @@ export default function Home() {
           </p>
         </div>
 
-        <section id="packages" className="section">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">ONE JUMP. THREE WAYS TO CAPTURE IT.</p>
-              <h2>Find your perfect package.</h2>
+        {/* Sticky Experience Sub-Nav (Matches original greedyadventures.com) */}
+        <nav className="experience-subnav" aria-label="Experience sub-navigation">
+          <div className="experience-subnav-inner">
+            <div className="subnav-tabs">
+              <a href="#packages" className="subnav-tab active">
+                PACKAGES
+              </a>
+              <a href="#the-plan" className="subnav-tab">
+                THE PLAN
+              </a>
+              <a href="#details" className="subnav-tab">
+                DETAILS
+              </a>
+              <a href="#good-to-know" className="subnav-tab">
+                GOOD TO KNOW
+              </a>
             </div>
-            <p>
-              Every package offers the same jump altitude,
-              <br />
-              aircraft and certified instructors.
+            <a href="#packages" className="subnav-cta">
+              CHOOSE PACKAGE
+            </a>
+          </div>
+        </nav>
+
+        {/* Packages Section: CHOOSE YOUR PACKAGE (Matches exact Greedy Adventures design) */}
+        <section id="packages" className="packages-section">
+          <div className="packages-container">
+            <h2 className="packages-heading">CHOOSE YOUR PACKAGE</h2>
+            <div className="packages-cards-grid">
+              {packages.map((p) => (
+                <article className="package-card" key={p.name}>
+                  <div className="package-card-media">
+                    <img
+                      src={p.image}
+                      alt={`${p.name} - ${p.subtitle}`}
+                      className="package-card-img"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="package-card-body">
+                    <h3 className="package-card-title">{p.name}</h3>
+                    <p className="package-card-subtitle">{p.subtitle}</p>
+                    <ul className="package-card-bullets">
+                      {p.features.map((f) => (
+                        <li key={f}>
+                          <span className="plus">+</span> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="package-card-pricing">
+                      <span className="price-amount">
+                        <span className="currency-symbol">฿</span>
+                        {p.price}
+                      </span>
+                      <span className="price-per">per person</span>
+                    </div>
+                    <a
+                      className="package-card-button"
+                      href="https://www.greedyadventures.com/experiences/sea-view-skydiving#packages"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      CHECK AVAILABILITY
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <p className="caption">
+              Prices from the public experience page, captured 30 October 2026. Confirm current prices and
+              availability with the team. Prototype only; no bookings are taken here.
             </p>
           </div>
-          <div className="packages">
-            {packages.map((p, i) => (
-              <article className={`package ${i === 1 ? "featured" : ""}`} key={p.name}>
-                <div className="package-top">
-                  <span>
-                    0{i + 1} / {p.name}
-                  </span>
-                  {i === 1 && <span className="tag">WITH VIDEO &amp; PHOTOS</span>}
-                </div>
-                <h3>{p.subtitle}</h3>
-                <p>{p.detail}</p>
-                <div className="price">
-                  ฿{p.price}
-                  <span> / person</span>
-                </div>
-                <ul>
-                  {p.features.map((f) => (
-                    <li key={f}>
-                      <Check size={16} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  className={`button ${i === 1 ? "lime" : "outline"}`}
-                  href={`https://www.greedyadventures.com/experiences/sea-view-skydiving#packages`}
-                >
-                  Explore {p.name} <ArrowUpRight size={17} />
-                </a>
-              </article>
-            ))}
-          </div>
-          <p className="caption">
-            Prices from the public experience page, captured 30 October 2026. Confirm current prices and
-            availability with the team. Prototype only; no bookings are taken here.
-          </p>
         </section>
 
+        {/* THE PLAN Section (Matches original website) */}
+        <section id="the-plan" className="plan-section">
+          <div className="plan-container">
+            <h2 className="plan-heading">THE PLAN</h2>
+            <div className="journey-grid">
+              <div>
+                <p className="eyebrow">FROM THE GROUND TO THE EXTRAORDINARY</p>
+                <h3 className="journey-subheading">
+                  From check-in
+                  <br />
+                  to touchdown.
+                </h3>
+                <p className="journey-desc">
+                  Meet your instructor, take in the coastline and experience the Gulf of Thailand from a whole new perspective.
+                </p>
+                <a href={sourceUrl} target="_blank" rel="noreferrer" className="journey-link">
+                  View Full Experience Details <ArrowUpRight size={17} />
+                </a>
+              </div>
+              <ol className="journey-steps">
+                {[
+                  "Check in with your photo ID",
+                  "Meet your instructor & gear up",
+                  "Take flight over the coastline",
+                  "Jump, freefall & fly under canopy",
+                  "Land with a story to tell",
+                ].map((s, i) => (
+                  <li key={s}>
+                    <span>0{i + 1}</span>
+                    {s}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* Video Film Section */}
         <section id="film" className="section film">
-          <p className="eyebrow">PATTAYA DROPZONE</p>
-          <h2>See the jump for yourself.</h2>
+          <div id="good-to-know">
+            <p className="eyebrow">PATTAYA DROPZONE</p>
+            <h2>See the jump for yourself.</h2>
+          </div>
           <video
             controls
             playsInline
@@ -249,37 +310,6 @@ export default function Home() {
               Open the video directly
             </a>
           </p>
-        </section>
-
-        <section id="journey" className="journey section">
-          <div>
-            <p className="eyebrow">FROM THE GROUND TO THE EXTRAORDINARY</p>
-            <h2>
-              From check-in
-              <br />
-              to touchdown.
-            </h2>
-            <p>
-              Meet your instructor, take in the coastline and experience the Gulf of Thailand from a whole new perspective.
-            </p>
-            <a href={sourceUrl} target="_blank" rel="noreferrer">
-              View Full Experience Details <ArrowUpRight size={17} />
-            </a>
-          </div>
-          <ol>
-            {[
-              "Check in with your photo ID",
-              "Meet your instructor & gear up",
-              "Take flight over the coastline",
-              "Jump, freefall & fly under canopy",
-              "Land with a story to tell",
-            ].map((s, i) => (
-              <li key={s}>
-                <span>0{i + 1}</span>
-                {s}
-              </li>
-            ))}
-          </ol>
         </section>
       </main>
 
