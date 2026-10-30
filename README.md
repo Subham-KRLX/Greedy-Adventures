@@ -100,6 +100,7 @@ npm test    # 11 unit tests in tests/chat.test.ts
 
 ## 6. Limitations & AI Assistance
 
-- **Limitations:** Experiential prototype only; does not include payments, real booking checkout, or user accounts. Grounded knowledge is based on the 30 October 2026 snapshot. Gemini free-tier has a 15 RPM limit, supported by automatic mock fallback.
+- **Limitations:** Experience prototype only; no payments, real booking checkout, user accounts or database. Knowledge is based on the 30 October 2026 snapshot and is not refreshed automatically. Provider quotas and availability vary by account. Failed Gemini requests fall back to deterministic mock responses; the header can still show live AI based on configuration, so check each response's mode.
+- **Scope:** Keyword-based media selection supports a bounded set of requests. Complex or mixed requests may not select the intended attachments. Public model endpoints need appropriate abuse and spend controls before wider use.
 - **Credits:** Built with `@assistant-ui/react` (MIT), `pdf-lib` (MIT), and `lucide-react` (ISC). Typography from Google Fonts; media from Greedy Adventures.
-- **AI Assistance:** Antigravity / Google DeepMind tools were used for implementation, testing, and documentation assistance. All code and architectural decisions have been verified and understood for technical interview defense.
+- **AI Assistance:** Codex and Antigravity were used for implementation, documentation and test development. Automated checks and remaining manual verification are described above. The applicant is responsible for reviewing the code and being able to explain or modify it; AI assistance is not a substitute for that review.
