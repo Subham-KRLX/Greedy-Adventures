@@ -1,8 +1,15 @@
-import { ArrowDown, ArrowUpRight, Check, Menu, Play, Search, Wind } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { ArrowDown, ArrowUpRight, Check, Menu, Play, Search, Wind, X } from "lucide-react";
 import Chat from "@/components/Chat";
 import { heroImage, packages, media, sourceUrl } from "@/lib/knowledge";
 
+const aircraftImage = "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80";
+
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <a className="skip" href="#main">
@@ -10,21 +17,90 @@ export default function Home() {
       </a>
 
       {/* Header / Nav matching Greedy Adventures */}
-      <nav className="nav" aria-label="Main navigation">
-        <a className="brand" href="/">
-          GREEDY<span>ADVENTURES</span>
-        </a>
-        <div className="nav-center">
-          <Search size={16} aria-hidden="true" />
-          <a href="#packages">ESCAPES</a>
-          <a href="#packages">ADVENTURES</a>
-          <a href="/knowledge">ABOUT</a>
-          <Menu size={18} aria-hidden="true" />
-        </div>
-        <a className="nav-contact" href="https://www.greedyadventures.com/contact">
-          CONTACT
-        </a>
-      </nav>
+      <header className="site-header">
+        <nav className="nav" aria-label="Main navigation">
+          <a className="brand" href="/">
+            GREEDY<span>ADVENTURES</span>
+          </a>
+          <div className="nav-center">
+            <Search size={16} aria-hidden="true" />
+            <a href="#packages">ESCAPES</a>
+            <a href="#journey">ADVENTURES</a>
+            <a href="/knowledge">ABOUT</a>
+            <button
+              className="nav-menu-btn"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              type="button"
+            >
+              {menuOpen ? <X size={19} /> : <Menu size={19} />}
+            </button>
+          </div>
+          <a className="nav-contact" href="https://www.greedyadventures.com/contact">
+            CONTACT
+          </a>
+        </nav>
+
+        {/* Dropdown mega menu (shown when menu icon is clicked) */}
+        {menuOpen && (
+          <div className="nav-mega-menu" role="dialog" aria-label="Navigation menu">
+            <button
+              className="nav-mega-close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+              type="button"
+            >
+              <X size={24} />
+            </button>
+            <div className="nav-mega-content">
+              <div className="nav-mega-links">
+                <a href="#journey" onClick={() => setMenuOpen(false)}>
+                  GO A LITTLE FURTHER
+                </a>
+                <a href="#packages" onClick={() => setMenuOpen(false)}>
+                  BOOK A TANDEM
+                </a>
+                <a href="/knowledge" onClick={() => setMenuOpen(false)}>
+                  KNOWLEDGE BASE
+                </a>
+                <a
+                  href="https://www.greedyadventures.com/contact"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  CONTACT
+                </a>
+                <a href="/" onClick={() => setMenuOpen(false)}>
+                  HOME
+                </a>
+              </div>
+
+              <div className="nav-mega-cards">
+                <a
+                  href="#packages"
+                  className="nav-mega-card"
+                  style={{ backgroundImage: `url('${heroImage}')` }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <div className="nav-mega-card-overlay" />
+                  <span>BOOK A TANDEM</span>
+                </a>
+                <a
+                  href="/knowledge"
+                  className="nav-mega-card"
+                  style={{ backgroundImage: `url('${aircraftImage}')` }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <div className="nav-mega-card-overlay" />
+                  <span>GUIDES AND STORIES</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
 
       {/* Header title block from experience page */}
       <div className="experience-header">
@@ -33,12 +109,25 @@ export default function Home() {
       </div>
 
       <main id="main">
+        {/* Hero section with ambient background video */}
         <section
           className="hero"
-          style={{
-            backgroundImage: `linear-gradient(90deg,rgba(0,24,32,.60),rgba(0,24,32,.06)),url('${heroImage}')`,
-          }}
+          style={{ backgroundImage: `url('${heroImage}')` }}
+          aria-label="Sea View Skydiving experience"
         >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={heroImage}
+            className="hero-video"
+            aria-hidden="true"
+          >
+            <source src={media[1].url} type="video/mp4" />
+          </video>
+          <div className="hero-video-overlay" aria-hidden="true" />
+
           <div className="hero-inner">
             <p className="hero-copy">
               One leap. An endless coastline.
@@ -49,7 +138,7 @@ export default function Home() {
               <a className="button lime" href="#packages">
                 Compare Packages <ArrowDown size={17} />
               </a>
-              <a className="watch" href={media[1].url} target="_blank" rel="noreferrer">
+              <a className="watch" href="#film">
                 <span>
                   <Play size={15} />
                 </span>{" "}
