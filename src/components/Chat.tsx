@@ -161,13 +161,16 @@ export default function Chat() {
               </h3>
               <p>Explore packages or ask for a brochure and video.</p>
               <div className="suggestions">
-                {["What is included in the package?", "Send me the brochure and a video."].map(
-                  (q) => (
-                    <ThreadPrimitive.Suggestion key={q} prompt={q} send>
-                      {q}
-                    </ThreadPrimitive.Suggestion>
-                  )
-                )}
+                {[
+                  "What is included in the package?",
+                  "Can you send me a brochure?",
+                  "Can I see a video of the experience?",
+                  "Send me the brochure and a video.",
+                ].map((q) => (
+                  <ThreadPrimitive.Suggestion key={q} prompt={q} send>
+                    {q}
+                  </ThreadPrimitive.Suggestion>
+                ))}
               </div>
             </ThreadPrimitive.Empty>
             <ThreadPrimitive.Messages
