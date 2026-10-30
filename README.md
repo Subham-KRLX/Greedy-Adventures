@@ -75,9 +75,9 @@ Access `/knowledge` via:
 
 ## 5. Verification & Testing
 
-Run the automated test suite covering all required prompts, follow-up memory, and fallback behavior:
+Run the automated test suite covering the four required prompt formats, supported mock follow-ups, unavailable-file selection and input validation. These tests do not call Gemini or verify provider failures:
 ```sh
-npm test    # 11 unit tests in tests/chat.test.ts (<200ms)
+npm test    # 11 unit tests in tests/chat.test.ts
 ```
 
 ### Repeatable Checks
@@ -88,6 +88,13 @@ npm test    # 11 unit tests in tests/chat.test.ts (<200ms)
 - **Follow-up Memory**: *"Tell me about VIP"*, then *"What about ECO?"*, then *"How much does it cost?"* → Correctly resolves ECO (THB 9,500).
 - **Missing Information**: *"What is the weight limit?"* or *"Send the insurance PDF"* → Refuses unlisted policies/files without hallucinating.
 - **Backend Trace & Failure**: On [`/knowledge`](https://greedy-adventures-zeta.vercel.app/knowledge), inspect live model activity or toggle *"Simulate backend failure"* to test 503 error handling.
+
+### Remaining Live and Browser Checks
+
+- After redeployment, run a question in the knowledge view and confirm `mode: "gemini"`, `modelCalled: true`, and the expected source context. A mock result means live generation was not verified.
+- Repeat the four media prompts and package follow-ups against the live model. Open the PDF and video to confirm they render, rather than checking only that links exist.
+- Verify real provider rejection, timeout and empty-response behavior separately. The simulated 503 checkbox tests the application's error UI, not Gemini's failure path. Current fallback traces do not preserve failed model attempts.
+- Check desktop and mobile layouts, keyboard navigation, FAQ controls, chat focus and Escape behavior. Unit tests do not establish accessibility or external media availability.
 
 ---
 
