@@ -1,14 +1,52 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowDown, ArrowUpRight, Menu, Play, Search, Wind, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowDown, ArrowUpRight, ChevronDown, Menu, Play, Search, Wind, X } from "lucide-react";
 import Chat from "@/components/Chat";
-import { heroImage, packages, media, sourceUrl } from "@/lib/knowledge";
+import {
+  heroImage,
+  packages,
+  planSteps,
+  experienceDetails,
+  faqs,
+  media,
+} from "@/lib/knowledge";
 
 const aircraftImage = "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/plane.webp";
 
+const galleryImages = [
+  "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/gearing-up.webp",
+  "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/jump-after-exit.webp",
+  "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/tandem-with-sea-view.webp",
+  "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/instrcutor-with-customer.webp",
+  "https://pub-89f493a2b50b4e43b99552a737bef138.r2.dev/offerings/apex-gallery/plane.webp",
+];
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeTab, setActiveTab] = useState<string>("options");
+
+  useEffect(() => {
+    const sectionIds = ["options", "the-day", "details", "faqs"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveTab(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px" }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -24,8 +62,8 @@ export default function Home() {
           </a>
           <div className="nav-center">
             <Search size={16} aria-hidden="true" />
-            <a href="#packages">ESCAPES</a>
-            <a href="#the-plan">ADVENTURES</a>
+            <a href="#options">ESCAPES</a>
+            <a href="#the-day">ADVENTURES</a>
             <a href="/knowledge">ABOUT</a>
             <button
               className="nav-menu-btn"
@@ -37,7 +75,7 @@ export default function Home() {
               {menuOpen ? <X size={19} /> : <Menu size={19} />}
             </button>
           </div>
-          <a className="nav-contact" href="https://www.greedyadventures.com/contact">
+          <a className="nav-contact" href="https://www.greedyadventures.com/contact" target="_blank" rel="noreferrer">
             CONTACT
           </a>
         </nav>
@@ -55,10 +93,10 @@ export default function Home() {
             </button>
             <div className="nav-mega-content">
               <div className="nav-mega-links">
-                <a href="#the-plan" onClick={() => setMenuOpen(false)}>
+                <a href="#the-day" onClick={() => setMenuOpen(false)}>
                   GO A LITTLE FURTHER
                 </a>
-                <a href="#packages" onClick={() => setMenuOpen(false)}>
+                <a href="#options" onClick={() => setMenuOpen(false)}>
                   BOOK A TANDEM
                 </a>
                 <a
@@ -76,7 +114,7 @@ export default function Home() {
 
               <div className="nav-mega-cards">
                 <a
-                  href="#packages"
+                  href="#options"
                   className="nav-mega-card"
                   style={{ backgroundImage: `url('${heroImage}')` }}
                   onClick={() => setMenuOpen(false)}
@@ -132,7 +170,7 @@ export default function Home() {
               Your first jump, with an expert by your side.
             </p>
             <div className="hero-actions">
-              <a className="button lime" href="#packages">
+              <a className="button lime" href="#options">
                 Compare Packages <ArrowDown size={17} />
               </a>
               <a className="watch" href="#film">
@@ -151,7 +189,8 @@ export default function Home() {
           </div>
         </section>
 
-        <div id="details" className="facts">
+        {/* Fact bar */}
+        <div className="facts">
           <div>
             <strong>
               13,000 <small>ft</small>
@@ -177,31 +216,44 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Sticky Experience Sub-Nav (Matches original greedyadventures.com) */}
+        {/* Sticky Experience Sub-Nav (Matches original greedyadventures.com with scroll-spy active indicator) */}
         <nav className="experience-subnav" aria-label="Experience sub-navigation">
           <div className="experience-subnav-inner">
             <div className="subnav-tabs">
-              <a href="#packages" className="subnav-tab active">
+              <a
+                href="#options"
+                className={`subnav-tab ${activeTab === "options" ? "active" : ""}`}
+              >
                 PACKAGES
               </a>
-              <a href="#the-plan" className="subnav-tab">
+              <a
+                href="#the-day"
+                className={`subnav-tab ${activeTab === "the-day" ? "active" : ""}`}
+              >
                 THE PLAN
               </a>
-              <a href="#details" className="subnav-tab">
+              <a
+                href="#details"
+                className={`subnav-tab ${activeTab === "details" ? "active" : ""}`}
+              >
                 DETAILS
               </a>
-              <a href="#good-to-know" className="subnav-tab">
+              <a
+                href="#faqs"
+                className={`subnav-tab ${activeTab === "faqs" ? "active" : ""}`}
+              >
                 GOOD TO KNOW
               </a>
             </div>
-            <a href="#packages" className="subnav-cta">
+            <a href="#options" className="subnav-cta">
               CHOOSE PACKAGE
             </a>
           </div>
         </nav>
 
-        {/* Packages Section: CHOOSE YOUR PACKAGE (Matches exact Greedy Adventures design) */}
-        <section id="packages" className="packages-section">
+        {/* 1. PACKAGES SECTION (#options & #packages) */}
+        <section id="options" className="packages-section scroll-target">
+          <div id="packages" />
           <div className="packages-container">
             <h2 className="packages-heading">CHOOSE YOUR PACKAGE</h2>
             <div className="packages-cards-grid">
@@ -234,7 +286,7 @@ export default function Home() {
                     </div>
                     <a
                       className="package-card-button"
-                      href="https://www.greedyadventures.com/experiences/sea-view-skydiving#packages"
+                      href="https://www.greedyadventures.com/experiences/sea-view-skydiving#options"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -251,65 +303,187 @@ export default function Home() {
           </div>
         </section>
 
-        {/* THE PLAN Section (Matches original website) */}
-        <section id="the-plan" className="plan-section">
-          <div className="plan-container">
-            <h2 className="plan-heading">THE PLAN</h2>
-            <div className="journey-grid">
-              <div>
-                <p className="eyebrow">FROM THE GROUND TO THE EXTRAORDINARY</p>
-                <h3 className="journey-subheading">
-                  From check-in
-                  <br />
-                  to touchdown.
-                </h3>
-                <p className="journey-desc">
-                  Meet your instructor, take in the coastline and experience the Gulf of Thailand from a whole new perspective.
-                </p>
-                <a href={sourceUrl} target="_blank" rel="noreferrer" className="journey-link">
-                  View Full Experience Details <ArrowUpRight size={17} />
-                </a>
-              </div>
-              <ol className="journey-steps">
-                {[
-                  "Check in with your photo ID",
-                  "Meet your instructor & gear up",
-                  "Take flight over the coastline",
-                  "Jump, freefall & fly under canopy",
-                  "Land with a story to tell",
-                ].map((s, i) => (
-                  <li key={s}>
-                    <span>0{i + 1}</span>
-                    {s}
+        {/* 2. THE PLAN SECTION (#the-day & #the-plan) */}
+        <section id="the-day" className="the-plan-section scroll-target">
+          <div id="the-plan" />
+          <div className="section-container">
+            <h2 className="section-main-heading">THE PLAN</h2>
+            <ol className="plan-steps-list">
+              {planSteps.map((step, idx) => {
+                const isEven = idx % 2 === 1;
+                return (
+                  <li className={`plan-step-item ${isEven ? "reverse" : ""}`} key={step.step}>
+                    <div className="plan-step-media">
+                      <img
+                        src={step.image}
+                        alt={`Step ${step.step}: ${step.title}`}
+                        className="plan-step-img"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="plan-step-content">
+                      <p className="plan-step-number">STEP {step.step}</p>
+                      <h3 className="plan-step-title">{step.title}</h3>
+                      <p className="plan-step-desc">{step.desc}</p>
+                    </div>
                   </li>
-                ))}
-              </ol>
+                );
+              })}
+            </ol>
+
+            {/* Stat bar below The Plan matching live site */}
+            <div className="dropzone-stat-bar">
+              <div>
+                <span>AT THE DROPZONE:</span> <strong>3H</strong>
+              </div>
+              <span className="divider">·</span>
+              <div>
+                <span>EXIT ALTITUDE:</span> <strong>13,000 FT</strong>
+              </div>
+              <span className="divider">·</span>
+              <div>
+                <span>FREEFALL:</span> <strong>60 SECONDS</strong>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Video Film Section */}
-        <section id="film" className="section film">
-          <div id="good-to-know">
-            <p className="eyebrow">PATTAYA DROPZONE</p>
-            <h2>See the jump for yourself.</h2>
+        {/* 3. THE DETAILS SECTION (#details) */}
+        <section id="details" className="details-section scroll-target">
+          <div className="section-container">
+            <h2 className="section-main-heading">THE DETAILS</h2>
+            <p className="section-sub-copy">
+              Everything that comes with this experience, and what to plan for yourself.
+            </p>
+
+            <div className="details-grid">
+              {/* Highlights */}
+              <div className="details-card">
+                <h3 className="details-card-title">HIGHLIGHTS</h3>
+                <ul className="details-list dot-list">
+                  {experienceDetails.highlights.map((h) => (
+                    <li key={h}>
+                      <span className="bullet-dot">•</span>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* What's Included */}
+              <div className="details-card">
+                <h3 className="details-card-title">WHAT'S INCLUDED</h3>
+                <ul className="details-list plus-list">
+                  {experienceDetails.included.map((inc) => (
+                    <li key={inc}>
+                      <span className="bullet-plus">+</span>
+                      <span>{inc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Experience Overview */}
+              <div className="details-card">
+                <h3 className="details-card-title">SEA VIEW TANDEM SKYDIVE - PATTAYA</h3>
+                <p className="details-overview-text">{experienceDetails.description}</p>
+              </div>
+
+              {/* Where you jump */}
+              <div className="details-card">
+                <h3 className="details-card-title">WHERE YOU JUMP</h3>
+                <p className="details-location-name">{experienceDetails.location.name}</p>
+                <p className="details-location-addr">{experienceDetails.location.address}</p>
+              </div>
+
+              {/* Operated by */}
+              <div className="details-card">
+                <h3 className="details-card-title">OPERATED BY</h3>
+                <p className="details-operator">{experienceDetails.location.operator}</p>
+              </div>
+            </div>
           </div>
-          <video
-            controls
-            playsInline
-            preload="none"
-            poster={heroImage}
-            aria-label="Sea View Skydiving experience video"
-          >
-            <source src={media[1].url} type="video/mp4" />
-            Your browser does not support inline video.
-          </video>
-          <p className="caption">
-            Footage from Greedy Adventures.{" "}
-            <a href={media[1].url} target="_blank" rel="noreferrer">
-              Open the video directly
-            </a>
-          </p>
+        </section>
+
+        {/* 4. GOOD TO KNOW SECTION (#faqs & #good-to-know) */}
+        <section id="faqs" className="faqs-section scroll-target">
+          <div id="good-to-know" />
+          <div className="section-container">
+            <h2 className="section-main-heading">GOOD TO KNOW</h2>
+            <div className="faqs-accordion">
+              {faqs.map((faq, index) => {
+                const isOpen = openFaq === index;
+                return (
+                  <div className="faq-item" key={faq.question}>
+                    <button
+                      type="button"
+                      className="faq-question-btn"
+                      onClick={() => setOpenFaq(isOpen ? null : index)}
+                      aria-expanded={isOpen}
+                    >
+                      <span>{faq.question}</span>
+                      <span className={`faq-icon ${isOpen ? "open" : ""}`}>
+                        <ChevronDown size={18} />
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="faq-answer">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* 5. CUSTOMER MOMENTS GALLERY ("See it. Feel it.") */}
+        <section className="customer-clips-section">
+          <div className="section-container">
+            <p className="eyebrow">A GLIMPSE OF THE JUMP</p>
+            <h2 className="section-main-heading">SEE IT. FEEL IT.</h2>
+            <p className="section-sub-copy">A few moments from our customers' jumps in Thailand.</p>
+            <div className="customer-gallery-reel">
+              {galleryImages.map((imgUrl, i) => (
+                <div className="gallery-slide" key={imgUrl}>
+                  <img
+                    src={imgUrl}
+                    alt={`Customer skydiving moment ${i + 1}`}
+                    className="gallery-slide-img"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 6. VIDEO FILM SECTION (#film) */}
+        <section id="film" className="film-section scroll-target">
+          <div className="section-container">
+            <p className="eyebrow">PATTAYA DROPZONE</p>
+            <h2 className="section-main-heading">SEE THE JUMP FOR YOURSELF</h2>
+            <div className="film-player-wrapper">
+              <video
+                controls
+                playsInline
+                preload="none"
+                poster={heroImage}
+                aria-label="Sea View Skydiving experience video"
+                className="film-video"
+              >
+                <source src={media[1].url} type="video/mp4" />
+                Your browser does not support inline video.
+              </video>
+            </div>
+            <p className="caption">
+              Footage from Greedy Adventures.{" "}
+              <a href={media[1].url} target="_blank" rel="noreferrer">
+                Open the video directly
+              </a>
+            </p>
+          </div>
         </section>
       </main>
 
